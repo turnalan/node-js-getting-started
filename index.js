@@ -1,10 +1,22 @@
-const express = require('express')
-const path = require('path')
-const PORT = process.env.PORT || 5000
 
-express()
-  .use(express.static(path.join(__dirname, 'public')))
-  .set('views', path.join(__dirname, 'views'))
-  .set('view engine', 'ejs')
-  .get('/', (req, res) => res.render('pages/index'))
-  .listen(PORT, () => console.log(`Listening on ${ PORT }`))
+const express = require('express')
+const app = express()
+const port = 3000
+const axios = require('axios').default;
+
+app.get('/getItems', async (req, res) => {
+
+  axios.get('https://bubbledashboard.firebaseio.com/song.json')
+  .then(function (response) {
+    console.log(response);
+    res.send(response.data);
+  })
+  .catch(function (error) {
+    res.send("error: " + error);
+  });
+
+})
+
+app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`)
+})
